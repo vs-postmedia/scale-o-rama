@@ -9,39 +9,17 @@ import popupTemplate from '../../../data/popup-template';
 
 // CSS
 import './Map.css';
-// import './maplibre-gl.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '../../../css/popup.css';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 // VARS
-let buffers, map, popup;
+const mapLayerName = 'polygon';
+let center, map, poly, polyCenter, popup;
 
 // FUNCTIONS
-async function init(options, poly) {
-		// get center of polygon
-		const polyCom = centerOfMass(poly);
-		const polyCenter = polyCom.geometry.coordinates;
-		console.log(`Poly Center: ${polyCenter}`)
-	
-		// create a new polygon with adjusted coordinates
-		const adjustedPolyCoords = poly.features[0].geometry.coordinates[0][0].map(c => {
-			const lngDiff = options.center[0] - polyCenter[0];
-			const latDiff = options.center[1] - polyCenter[1];
-	
-			return [c[0] + lngDiff, c[1] + latDiff];
-		});
-	
-		// create geojson for adjusted polygon
-		var geojson = {
-			"type": "Feature",
-			"properties": {},
-			"geometry": {
-				"type": "Polygon",
-				"coordinates": [adjustedPolyCoords]
-			}
-		};
-	
+async function init(options, polygon) {
+	poly = polygon;
 
 	// setup the map
 	map = new Maplibregl.Map({
@@ -60,44 +38,64 @@ async function init(options, poly) {
 	// setup popup for buffer zoness
 	// const popup = setupPopup(map, buffers);
 
+	// recenter polygon
+	const geojson = recenterMap(options.center, poly);
+
 	// Add zoom, geocode, etc, to the map
 	addMapFeatures(map, geocoder);
 
-	// add data
-	map.on('load', () => {
-		const layers = map.getStyle().layers;
-		// Find the index of the first symbol layer in the map style
-		var firstSymbolId;
-		for (var i = 0; i < layers.length; i++) {
-			if (layers[i].type === 'symbol') {
-				firstSymbolId = layers[i].id;
-				break;
-			}
-		}
-		// add layers
+	map.on('load', () => addMapData(map, geojson));
+
+	map.on('click', e => {
+		const center = [e.lngLat.lng, e.lngLat.lat]
+		
+		// clear existing polygon
 		map
-			// polygon
-			.addSource('polygon', {
-				type: 'geojson',
-				data: geojson
-			})
-			.addLayer({
-				id: 'polygon',
-				type: 'fill',
-				source: 'polygon',
-				layout: {},
-				paint: {
-					'fill-color': '#DD2D25',
-					'fill-opacity': 0.5,
-					'fill-outline-color': '#FFF'
-				}
-			},
-			// insert below labels
-			firstSymbolId
-		);
-	});
+			.removeLayer(mapLayerName)
+			.removeSource(mapLayerName);
+
+		// recenter & add back to the map
+		const geojson = recenterMap(center, poly);
+		addMapData(map, geojson);
+	})
 }
 
+function addMapData(map, geojson) {
+	const layers = map.getStyle().layers;
+	// Find the index of the first symbol layer in the map style
+	var firstSymbolId;
+	for (var i = 0; i < layers.length; i++) {
+		if (layers[i].type === 'symbol') {
+			firstSymbolId = layers[i].id;
+			break;
+		}
+	}
+	
+	// add layers
+	map
+		// polygon
+		.addSource(mapLayerName, {
+			type: 'geojson',
+			data: geojson
+		})
+		.addLayer({
+			id: 'polygon',
+			type: 'fill',
+			source: mapLayerName,
+			layout: {},
+			paint: {
+				'fill-color': '#DD2D25',
+				'fill-opacity': 0.5,
+				'fill-outline-color': '#FFF'
+			}
+		},
+		// insert below labels
+		firstSymbolId
+	);
+	// map.on('load', () => {
+		
+	// });
+}
 
 function addMapFeatures(map, geocoder) {
 	map
@@ -116,6 +114,32 @@ function addMapFeatures(map, geocoder) {
 			new Maplibregl.NavigationControl()
 		);
 
+}
+
+function recenterMap(new_center, poly) {
+	// get center of polygon
+	const polyCom = centerOfMass(poly);
+	polyCenter = polyCom.geometry.coordinates;
+
+	// create a new polygon with adjusted coordinates
+	const adjustedPolyCoords = poly.features[0].geometry.coordinates[0][0].map(c => {
+		const lngDiff = new_center[0] - polyCenter[0];
+		const latDiff = new_center[1] - polyCenter[1];
+
+		return [c[0] + lngDiff, c[1] + latDiff];
+	});
+
+	// create geojson for adjusted polygon
+	var geojson = {
+		"type": "Feature",
+		"properties": {},
+		"geometry": {
+			"type": "Polygon",
+			"coordinates": [adjustedPolyCoords]
+		}
+	};
+
+	return geojson;
 }
 
 async function setupGeocoder(map, options) {
