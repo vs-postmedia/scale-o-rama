@@ -1,22 +1,24 @@
 import Map from '../Map/Map';
 import './App.css';
 
-// scrollytelling chapters
-import data from '../../../data/data';
+// data imports
+import locations from '../../../data/facilities';
+import buffers from '../../../data/facilities-buffers';
 
 // map tiles & attribution
 const options = {
-	activeSection: 'baker',
-	bearing: 27,
-	center: [-0.15591514, 51.51830379],
+	bearing: 0,
+	center: [-122.98876218587124, 49.24433191299974],
+	geocodeZoomLevel: 14,
 	mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=arETEBBqRxRrA5v30F6H',
 	pitch: 45,
-	zoom:  15.5
+	zoom:  9.25
 };
 
 
-function init() {
-	Map.init(data, options);	
+function init(polygon) {
+
+	Map.init(options, polygon);	
 }
 
 export default { init };

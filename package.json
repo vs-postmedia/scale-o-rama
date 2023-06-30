@@ -1,6 +1,6 @@
 {
-  "name": "maplibre-template",
-  "homepage": "https://vs-postmedia.github.io/graphics-template/",
+  "name": "scale-o-rama",
+  "homepage": "https://vs-postmedia.github.io/scale-o-rama",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,7 +15,12 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.10.2",
+    "@maplibre/maplibre-gl-geocoder": "^1.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/points-within-polygon": "^6.5.0",
+    "@turf/turf": "^6.5.0",
     "axios": "^0.21.1",
+    "mapbox-gl-draw": "^0.16.0",
     "maplibre-gl": "^1.15.2"
   },
   "devDependencies": {
