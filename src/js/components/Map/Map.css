@@ -14,9 +14,9 @@
 }
 
 /* GEOLOCATE */
-#map > div.maplibregl-control-container.mapboxgl-control-container > div.maplibregl-ctrl-top-right.mapboxgl-ctrl-top-right > div:nth-child(1) {
+/* #map > div.maplibregl-control-container.mapboxgl-control-container > div.maplibregl-ctrl-top-right.mapboxgl-ctrl-top-right > div:nth-child(1) {
 	max-height: 29px;
-}
+} */
 
 /* SEARCH BOX */
 #map > div.maplibregl-control-container.mapboxgl-control-container > div.maplibregl-ctrl-top-right.mapboxgl-ctrl-top-right > div.mapboxgl-ctrl-geocoder.mapboxgl-ctrl.maplibregl-ctrl-geocoder.maplibregl-ctrl {

@@ -1,9 +1,11 @@
 import Map from '../Map/Map';
 import './App.css';
 
+// VARS
+let polygons;
 // data imports
-import locations from '../../../data/facilities';
-import buffers from '../../../data/facilities-buffers';
+// import locations from '../../../data/facilities';
+// import buffers from '../../../data/facilities-buffers';
 
 // map tiles & attribution
 const options = {
@@ -16,8 +18,45 @@ const options = {
 };
 
 
-function init(polygon) {
-	Map.init(options, polygon);	
+function init(navImages, polys) {
+	polygons = polys;
+
+	// startup the map
+	Map.init(options, polygons[0]);
+
+	// setup nav bar
+	navImages.forEach((d,i) => buildNav(d, i));
+}
+
+function buildNav(img, i) {
+	// load nav images
+	loadNavImages(img, i + 1);
+
+	// add event handler
+	const nav = document.querySelector('#nav')
+
+	nav.addEventListener('click', e => {
+		let navEl;
+
+		if (e.target.tagName === 'IMG') {
+			const id = e.target.id
+			navEl = id.substr(id.length - 1);
+
+			// reset the map the map
+			Map.removeMap();
+			Map.init(options, polygons[navEl]);
+		}
+		
+	});
+}
+
+function loadNavImages(img, i) {
+	const el = document.getElementById(`nav-0${i}`);
+	const nav_img = document.createElement('img');
+	nav_img.src = img; 
+	nav_img.alt = `Nav 0${i} button image`;
+	nav_img.id = `nav-img-0${i}`;
+	el.appendChild(nav_img);
 }
 
 export default { init };

@@ -2,16 +2,17 @@
 import Maplibregl from 'maplibre-gl';
 import * as turf from '@turf/helpers';
 import centerOfMass from '@turf/center-of-mass';
-import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
+// import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 
 // TEMPLATES
 import popupTemplate from '../../../data/popup-template';
 
 // CSS
 import './Map.css';
+import './Nav.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import '../../../css/popup.css';
-import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
+// import '../../../css/popup.css';
+// import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 // VARS
 const mapLayerName = 'polygon';
@@ -33,7 +34,7 @@ async function init(options, polygon) {
 	});
 
 	// setup address search
-	const geocoder = await setupGeocoder(map, options);
+	// const geocoder = await setupGeocoder(map, options);
 
 	// setup popup for buffer zoness
 	// const popup = setupPopup(map, buffers);
@@ -42,11 +43,13 @@ async function init(options, polygon) {
 	const geojson = recenterMap(options.center, poly);
 
 	// Add zoom, geocode, etc, to the map
-	addMapFeatures(map, geocoder);
+	addMapFeatures(map);
 
 	map.on('load', () => addMapData(map, geojson));
 
-	map.on('click', e => updatePolygonPosition(e))
+	map.on('click', e => updatePolygonPosition(e));
+
+	return map;
 }
 
 function addMapData(map, geojson) {
@@ -86,15 +89,15 @@ function addMapData(map, geojson) {
 function addMapFeatures(map, geocoder) {
 	map
 		// geolocate control
-		.addControl(
-			new Maplibregl.GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true
-				},
-				trackUserLocation: true
-			}))
+		// .addControl(
+		// 	new Maplibregl.GeolocateControl({
+		// 		positionOptions: {
+		// 			enableHighAccuracy: true
+		// 		},
+		// 		trackUserLocation: true
+		// 	}))
 		// geodcoder to search an address
-		.addControl(geocoder)
+		// .addControl(geocoder)
 		// zoom
 		.addControl(
 			new Maplibregl.NavigationControl()
@@ -243,6 +246,13 @@ function showPopup(e, flyto) {
 		.addTo(map);
 }
 
+function removeMap() {
+	// clear existing map
+	if (map._removed !== true) {
+		map.remove();
+	}
+}
+
 function updatePolygonPosition(e) {
 	const center = [e.lngLat.lng, e.lngLat.lat]
 		
@@ -256,4 +266,4 @@ function updatePolygonPosition(e) {
 	addMapData(map, geojson);
 }
 
-export default { init };
+export default { init, removeMap };
