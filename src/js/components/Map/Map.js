@@ -46,23 +46,12 @@ async function init(options, polygon) {
 
 	map.on('load', () => addMapData(map, geojson));
 
-	map.on('click', e => {
-		const center = [e.lngLat.lng, e.lngLat.lat]
-		
-		// clear existing polygon
-		map
-			.removeLayer(mapLayerName)
-			.removeSource(mapLayerName);
-
-		// recenter & add back to the map
-		const geojson = recenterMap(center, poly);
-		addMapData(map, geojson);
-	})
+	map.on('click', e => updatePolygonPosition(e))
 }
 
 function addMapData(map, geojson) {
 	const layers = map.getStyle().layers;
-	// Find the index of the first symbol layer in the map style
+	// Find the index of the first symbol layer in the map style so we can insert the layer below labels
 	var firstSymbolId;
 	for (var i = 0; i < layers.length; i++) {
 		if (layers[i].type === 'symbol') {
@@ -89,12 +78,9 @@ function addMapData(map, geojson) {
 				'fill-outline-color': '#FFF'
 			}
 		},
-		// insert below labels
+		// insert layer below labels
 		firstSymbolId
 	);
-	// map.on('load', () => {
-		
-	// });
 }
 
 function addMapFeatures(map, geocoder) {
@@ -257,5 +243,17 @@ function showPopup(e, flyto) {
 		.addTo(map);
 }
 
+function updatePolygonPosition(e) {
+	const center = [e.lngLat.lng, e.lngLat.lat]
+		
+	// clear existing polygon
+	map
+		.removeLayer(mapLayerName)
+		.removeSource(mapLayerName);
+
+	// recenter & add back to the map
+	const geojson = recenterMap(center, poly);
+	addMapData(map, geojson);
+}
 
 export default { init };
