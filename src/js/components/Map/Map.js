@@ -1,23 +1,17 @@
 // LIBS
 import Maplibregl from 'maplibre-gl';
-import * as turf from '@turf/helpers';
 import centerOfMass from '@turf/center-of-mass';
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
-
-// TEMPLATES
-// import popupTemplate from '../../../data/popup-template';
 
 // CSS
 import './Map.css';
 import './Nav.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
-// import '../../../css/popup.css';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 // VARS
 const mapLayerName = 'polygon';
-const geocodeZoomLevel = 8;
-let center, map, poly, polyCenter, popup;
+let center, map, poly, polyCenter
 
 // FUNCTIONS
 async function init(options, polygon) {
@@ -36,9 +30,6 @@ async function init(options, polygon) {
 
 	// setup address search
 	const geocoder = await setupGeocoder(map, options);
-
-	// setup popup for buffer zoness
-	// const popup = setupPopup(map, buffers);
 
 	// recenter polygon
 	const geojson = recenterPolygon(options.center, poly);
@@ -182,7 +173,7 @@ async function setupGeocoder(map, options) {
 		// filter results to only return BC
 		// filter: item => { return item.properties.address['ISO3166-2-lvl4'] === 'CA-BC' },
 		maplibregl: Maplibregl,
-		placeholder: 'Find a city...'
+		placeholder: 'Find a location...'
 	});
 
 	// default zoom is too close
@@ -191,60 +182,13 @@ async function setupGeocoder(map, options) {
 			center: e.result.center,
 			// this animation is considered essential with respect to prefers-reduced-motion
 			essential: true,
-			zoom: geocodeZoomLevel
+			zoom: options.geocodeZoomLevel
 		});
 		// Perform actions after the fly-to animation is complete
 		map.once('moveend', () => updatePolygonPosition(e, true));
 	});
 
-return geocoder;
-}
-
-function setupPopup(map) {
-	// create a popup but don't add it to the map yet...
-	popup = new Maplibregl.Popup({
-		closeButton: true,
-		closeonClick: false
-	});
-
-	// mouseevents for popup
-	// map.on('mouseenter', 'buffers-1k', showPopup);
-	// map.on('click', 'buffers-1k', showPopup);
-	map.on('click', showPopup)
-}
-
-function showPopup(e, flyto) {
-	const data = [];
-
-	console.log(e)
-
-	// create a geojson & set lnglat coords for our point – differs depending on if it's the result of a map click or geocode result
-	const point = (flyto === true) ? turf.point(e.result.center) : turf.point([e.lngLat.lng, e.lngLat.lat]);
-	const lng_lat = (flyto === true) ? e.result.center : e.lngLat
-
-	// find out if the point is inside buffers
-	buffers.buffers_1k.features.forEach(d => {
-		// is point within a buffer polygon?
-		const withinPoly = PointsWithinPolygon(point, d);
-		// if so, let's cache the buffer
-		if (withinPoly.features.length > 0) data.push(d);
-	});
-
-	// add up all the values from the overlapping buffers
-	const totals = addBufferValues(data);
-
-	// we don't need a popup if we're not inside a buffer...
-	if (totals === undefined) return;
-
-	// fill in the popup template
-	const html = popupTemplate(totals);
-
-	// populate the popup, set coordinates & display on map
-	popup
-		// .setLngLat(e.lngLat)
-		.setLngLat(lng_lat)
-		.setHTML(html)
-		.addTo(map);
+	return geocoder;
 }
 
 function removeMap() {

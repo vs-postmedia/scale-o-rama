@@ -11,7 +11,7 @@ let polygons;
 const options = {
 	bearing: 0,
 	center: [-122.58876218587124, 49.24433191299974],
-	geocodeZoomLevel: 14,
+	geocodeZoomLevel: 8,
 	mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=arETEBBqRxRrA5v30F6H',
 	pitch: 0,
 	zoom:  7.75
