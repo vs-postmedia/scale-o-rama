@@ -182,13 +182,12 @@ async function setupGeocoder(map, options) {
 		// filter results to only return BC
 		// filter: item => { return item.properties.address['ISO3166-2-lvl4'] === 'CA-BC' },
 		maplibregl: Maplibregl,
-		placeholder: 'Lookup an address...'
+		placeholder: 'Find a city...'
 	});
 
 	// default zoom is too close
 	geocoder.on('result', e => {
 		map.flyTo({
-		// map.easeTo({
 			center: e.result.center,
 			// this animation is considered essential with respect to prefers-reduced-motion
 			essential: true,
