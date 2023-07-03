@@ -2,20 +2,21 @@
 import Maplibregl from 'maplibre-gl';
 import * as turf from '@turf/helpers';
 import centerOfMass from '@turf/center-of-mass';
-// import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
+import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 
 // TEMPLATES
-import popupTemplate from '../../../data/popup-template';
+// import popupTemplate from '../../../data/popup-template';
 
 // CSS
 import './Map.css';
 import './Nav.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 // import '../../../css/popup.css';
-// import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
+import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 // VARS
 const mapLayerName = 'polygon';
+const geocodeZoomLevel = 8;
 let center, map, poly, polyCenter, popup;
 
 // FUNCTIONS
@@ -34,16 +35,16 @@ async function init(options, polygon) {
 	});
 
 	// setup address search
-	// const geocoder = await setupGeocoder(map, options);
+	const geocoder = await setupGeocoder(map, options);
 
 	// setup popup for buffer zoness
 	// const popup = setupPopup(map, buffers);
 
 	// recenter polygon
-	const geojson = recenterMap(options.center, poly);
+	const geojson = recenterPolygon(options.center, poly);
 
 	// Add zoom, geocode, etc, to the map
-	addMapFeatures(map);
+	addMapFeatures(map, geocoder);
 
 	map.on('load', () => addMapData(map, geojson));
 
@@ -89,15 +90,15 @@ function addMapData(map, geojson) {
 function addMapFeatures(map, geocoder) {
 	map
 		// geolocate control
-		// .addControl(
-		// 	new Maplibregl.GeolocateControl({
-		// 		positionOptions: {
-		// 			enableHighAccuracy: true
-		// 		},
-		// 		trackUserLocation: true
-		// 	}))
+		.addControl(
+			new Maplibregl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true
+				},
+				trackUserLocation: true
+			}))
 		// geodcoder to search an address
-		// .addControl(geocoder)
+		.addControl(geocoder)
 		// zoom
 		.addControl(
 			new Maplibregl.NavigationControl()
@@ -105,7 +106,7 @@ function addMapFeatures(map, geocoder) {
 
 }
 
-function recenterMap(new_center, poly) {
+function recenterPolygon(new_center, poly) {
 	// get center of polygon
 	const polyCom = centerOfMass(poly);
 	polyCenter = polyCom.geometry.coordinates;
@@ -177,8 +178,9 @@ async function setupGeocoder(map, options) {
 	const geocoder = new MaplibreGeocoder(geocoder_api, {
 		clearOnBlur: true,
 		// Filter results to only include addresses in Canada
-		countries: 'ca',
-		filter: item => { return item.properties.address['ISO3166-2-lvl4'] === 'CA-BC' },
+		// countries: 'ca',
+		// filter results to only return BC
+		// filter: item => { return item.properties.address['ISO3166-2-lvl4'] === 'CA-BC' },
 		maplibregl: Maplibregl,
 		placeholder: 'Lookup an address...'
 	});
@@ -190,10 +192,10 @@ async function setupGeocoder(map, options) {
 			center: e.result.center,
 			// this animation is considered essential with respect to prefers-reduced-motion
 			essential: true,
-			zoom: options.geocodeZoomLevel
+			zoom: geocodeZoomLevel
 		});
 		// Perform actions after the fly-to animation is complete
-		map.once('moveend', () => showPopup(e, true));
+		map.once('moveend', () => updatePolygonPosition(e, true));
 	});
 
 return geocoder;
@@ -253,8 +255,9 @@ function removeMap() {
 	}
 }
 
-function updatePolygonPosition(e) {
-	const center = [e.lngLat.lng, e.lngLat.lat]
+function updatePolygonPosition(e, flyto) {
+	// source for center coords differs depending on if it's the result of a map click or geocode result
+	const center = (flyto === true) ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
 		
 	// clear existing polygon
 	map
@@ -262,7 +265,7 @@ function updatePolygonPosition(e) {
 		.removeSource(mapLayerName);
 
 	// recenter & add back to the map
-	const geojson = recenterMap(center, poly);
+	const geojson = recenterPolygon(center, poly);
 	addMapData(map, geojson);
 }
 

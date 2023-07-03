@@ -1,0 +1,21 @@
+#nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+}
+
+#nav > li {
+    cursor: pointer;
+    flex: 1;
+    list-style-type: none;
+    position: relative;
+}
+
+#nav > li > h3 {
+    padding: 5px 3px;
+    position: absolute;
+}
+#nav > li > img {
+    /* height: 150px; */
+    max-width: 98%;
+}

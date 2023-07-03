@@ -1,0 +1,18 @@
+.popup-container {
+    margin: 5px;
+}
+
+.popup-container > h2 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.popup-container .bold {
+    font-family: 'BentonSansCond-Bold', sans-serif;
+    font-weight: 800;
+}
+
+.popup-container ul {
+    list-style-type: none;
+    padding: 0;
+}
