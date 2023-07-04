@@ -3,9 +3,6 @@ import './App.css';
 
 // VARS
 let polygons;
-// data imports
-// import locations from '../../../data/facilities';
-// import buffers from '../../../data/facilities-buffers';
 
 // map tiles & attribution
 const options = {
@@ -44,7 +41,7 @@ function buildNav(img, i) {
 
 			// reset the map the map
 			Map.removeMap();
-			Map.init(options, polygons[navEl]);
+			Map.init(options, polygons[parseInt(navEl) - 1]);
 		}
 		
 	});
