@@ -196,7 +196,13 @@ async function setupGeocoder(map, options) {
 
 function removeMap() {
 	// clear existing map
-	if (map._removed !== true) map.remove();
+	if (map._removed !== true) {
+		map.remove();
+		// clear existing polygon
+		// map
+			// .removeLayer(mapLayerName)
+			// .removeSource(mapLayerName);
+	}
 }
 
 function updatePolygonPosition(e, flyto) {

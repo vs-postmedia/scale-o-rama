@@ -6,12 +6,18 @@
 
 #app h1 {
 	background-color: #FFF;
-	margin: 0;
+	margin: 0 auto;
 	margin-block-start: 0;
 	padding: 1rem 0 0.5rem 0;
-	/* position: fixed; */
-	width: 100%;
-	z-index: 100;
+	max-width: 600px;
+}
+#app .subhead {
+	margin: 0 auto;
+	max-width: 600px;
+	padding: 4px 0;
+}
+#app .subhead:last-of-type {
+	padding-bottom: 0;
 }
 #scroller {
 	padding: 0;

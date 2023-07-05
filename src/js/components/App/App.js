@@ -43,7 +43,7 @@ function buildNav(img, i) {
 			el.classList.remove('active');
 		});
 
-
+		// reset map on click
 		if (e.target.tagName === 'IMG') {
 			const id = e.target.id
 			navEl = id.substr(id.length - 1);
