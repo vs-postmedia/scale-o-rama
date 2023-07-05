@@ -100,12 +100,15 @@ let center, Map_map, Map_poly, polyCenter;
 async function init(options, polygon) {
   Map_poly = polygon;
 
+  // if we've already set the map center, use that. otherwise, set the var
+  if (center === undefined) center = options.center;
+
   // setup the map
   Map_map = new maplibre_gl_default.a.Map({
     antialias: true,
     container: 'map',
     style: options.mapboxStyle,
-    center: options.center,
+    center: center,
     zoom: options.zoom,
     bearing: options.bearing,
     pitch: options.pitch
@@ -115,7 +118,7 @@ async function init(options, polygon) {
   const geocoder = await setupGeocoder(Map_map, options);
 
   // recenter polygon
-  const geojson = recenterPolygon(options.center, Map_poly);
+  const geojson = recenterPolygon(center, Map_poly);
 
   // Add zoom, geocode, etc, to the map
   addMapFeatures(Map_map, geocoder);
@@ -201,7 +204,7 @@ async function setupGeocoder(map, options) {
         const response = await fetch(request);
         const geojson = await response.json();
         for (let feature of geojson.features) {
-          let center = [feature.bbox[0] + (feature.bbox[2] - feature.bbox[0]) / 2, feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2];
+          center = [feature.bbox[0] + (feature.bbox[2] - feature.bbox[0]) / 2, feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2];
           let point = {
             type: 'Feature',
             geometry: {
@@ -250,14 +253,17 @@ async function setupGeocoder(map, options) {
 function removeMap() {
   // clear existing map
   if (Map_map._removed !== true) {
-    // map.remove();
+    Map_map.remove();
     // clear existing polygon
-    Map_map.removeLayer(mapLayerName).removeSource(mapLayerName);
+    // map
+    // .removeLayer(mapLayerName)
+    // .removeSource(mapLayerName);
   }
 }
+
 function updatePolygonPosition(e, flyto) {
   // source for center coords differs depending on if it's the result of a map click or geocode result
-  const center = flyto === true ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
+  center = flyto === true ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
 
   // clear existing polygon
   Map_map.removeLayer(mapLayerName).removeSource(mapLayerName);
@@ -319,6 +325,8 @@ function buildNav(img, i) {
     elems.forEach(function (el) {
       el.classList.remove('active');
     });
+
+    // reset map on click
     if (e.target.tagName === 'IMG') {
       var id = e.target.id;
       navEl = id.substr(id.length - 1);
@@ -346,11 +354,11 @@ function loadNavImages(img, i) {
   init: App_init
 });
 // CONCATENATED MODULE: ./src/images/nav-01.png
-/* harmony default export */ var nav_01 = (__webpack_require__.p + "assets/nav-01.20368cda.png");
+/* harmony default export */ var nav_01 = (__webpack_require__.p + "assets/nav-01.b1af00a3.png");
 // CONCATENATED MODULE: ./src/images/nav-02.png
-/* harmony default export */ var nav_02 = (__webpack_require__.p + "assets/nav-02.255cdfdb.png");
+/* harmony default export */ var nav_02 = (__webpack_require__.p + "assets/nav-02.0fea488e.png");
 // CONCATENATED MODULE: ./src/images/nav-03.png
-/* harmony default export */ var nav_03 = (__webpack_require__.p + "assets/nav-03.79c340c9.png");
+/* harmony default export */ var nav_03 = (__webpack_require__.p + "assets/nav-03.cd857d44.png");
 // EXTERNAL MODULE: ./src/data/donnie-creek-july02.geojson
 var donnie_creek_july02_geojson = __webpack_require__(50);
 var donnie_creek_july02_geojson_default = /*#__PURE__*/__webpack_require__.n(donnie_creek_july02_geojson);
