@@ -293,7 +293,7 @@ var activeNavId, App_polygons;
 var App_options = {
   activeNavId: 'nav-img-01',
   bearing: 0,
-  center: [-122.58876218587124, 49.24433191299974],
+  center: [-122.69976218587124, 49.24433191299974],
   geocodeZoomLevel: 8,
   mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=arETEBBqRxRrA5v30F6H',
   pitch: 0,
