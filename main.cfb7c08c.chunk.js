@@ -121,7 +121,8 @@ async function init(options, polygon) {
   const geojson = recenterPolygon(center, Map_poly);
 
   // Add zoom, geocode, etc, to the map
-  addMapFeatures(Map_map, geocoder);
+  // addMapFeatures(map, geocoder);
+
   Map_map.on('load', () => addMapData(Map_map, geojson));
   Map_map.on('click', e => updatePolygonPosition(e));
   return Map_map;
@@ -136,6 +137,7 @@ function addMapData(map, geojson) {
       break;
     }
   }
+  console.log(firstSymbolId);
 
   // add layers
   map
@@ -156,7 +158,15 @@ function addMapData(map, geojson) {
   },
   // insert layer below labels
   firstSymbolId);
+
+  // layers.forEach(layer => {
+  // 	console.log(layer)
+  // 	if (layer.type === 'symbol') {
+  // 		map.removeLayer(layer.id);
+  // 	}
+  // })
 }
+
 function addMapFeatures(map, geocoder) {
   map
   // geolocate control
@@ -234,7 +244,7 @@ async function setupGeocoder(map, options) {
     // filter results to only return BC
     // filter: item => { return item.properties.address['ISO3166-2-lvl4'] === 'CA-BC' },
     maplibregl: maplibre_gl_default.a,
-    placeholder: 'Find a location...'
+    placeholder: 'Compare to a location...'
   });
 
   // default zoom is too close
