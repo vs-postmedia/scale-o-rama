@@ -17,12 +17,15 @@ let center, map, poly, polyCenter
 async function init(options, polygon) {
 	poly = polygon;
 
+	// if we've already set the map center, use that. otherwise, set the var
+	if (center === undefined) center = options.center;
+
 	// setup the map
 	map = new Maplibregl.Map({
 		antialias: true,
 		container: 'map',
 		style: options.mapboxStyle,
-		center: options.center,
+		center: center,
 		zoom: options.zoom,
 		bearing: options.bearing,
 		pitch: options.pitch	
@@ -32,7 +35,7 @@ async function init(options, polygon) {
 	const geocoder = await setupGeocoder(map, options);
 
 	// recenter polygon
-	const geojson = recenterPolygon(options.center, poly);
+	const geojson = recenterPolygon(center, poly);
 
 	// Add zoom, geocode, etc, to the map
 	addMapFeatures(map, geocoder);
@@ -136,7 +139,7 @@ async function setupGeocoder(map, options) {
 				const geojson = await response.json();
 				
 				for (let feature of geojson.features) {
-					let center = [
+					center = [
 						feature.bbox[0] + (feature.bbox[2] - feature.bbox[0]) / 2,
 						feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2
 					];
@@ -193,18 +196,12 @@ async function setupGeocoder(map, options) {
 
 function removeMap() {
 	// clear existing map
-	if (map._removed !== true) {
-		// map.remove();
-		// clear existing polygon
-		map
-			.removeLayer(mapLayerName)
-			.removeSource(mapLayerName);
-	}
+	if (map._removed !== true) map.remove();
 }
 
 function updatePolygonPosition(e, flyto) {
 	// source for center coords differs depending on if it's the result of a map click or geocode result
-	const center = (flyto === true) ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
+	center = (flyto === true) ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
 		
 	// clear existing polygon
 	map
