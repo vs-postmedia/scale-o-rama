@@ -12,10 +12,21 @@
 }
 
 #nav > li > h3 {
-    padding: 5px 3px;
+    padding: 5px 10px;
     position: absolute;
+    z-index: 99;
 }
 #nav > li > img {
-    /* height: 150px; */
+    border-radius: 15px;
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
     max-width: 98%;
+    margin: 0 3px;
+    transition: all 0.3s;
+}
+#nav > li > img.active,
+#nav > li > img:hover {
+    box-shadow: 3px 3px 5px var(--grey03);
+    filter: grayscale(0);
+    -webkit-filter: grayscale(0);
 }

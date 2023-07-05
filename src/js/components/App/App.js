@@ -2,10 +2,11 @@ import Map from '../Map/Map';
 import './App.css';
 
 // VARS
-let polygons;
+let activeNavId, polygons;
 
 // map tiles & attribution
 const options = {
+	activeNavId: 'nav-img-01',
 	bearing: 0,
 	center: [-122.58876218587124, 49.24433191299974],
 	geocodeZoomLevel: 8,
@@ -16,6 +17,7 @@ const options = {
 
 
 function init(navImages, polys) {
+	activeNavId = options.activeNavId;
 	polygons = polys;
 
 	// startup the map
@@ -35,9 +37,19 @@ function buildNav(img, i) {
 	nav.addEventListener('click', e => {
 		let navEl;
 
+		// clear the active class
+		const elems = document.querySelectorAll('#nav > li > img');
+		elems.forEach(el => {
+			el.classList.remove('active');
+		});
+
+
 		if (e.target.tagName === 'IMG') {
 			const id = e.target.id
 			navEl = id.substr(id.length - 1);
+
+			const activeNavEl = document.querySelector(`#${id}`);
+			activeNavEl.classList.add('active');
 
 			// reset the map the map
 			Map.removeMap();
@@ -53,6 +65,10 @@ function loadNavImages(img, i) {
 	nav_img.src = img; 
 	nav_img.alt = `Nav 0${i} button image`;
 	nav_img.id = `nav-img-0${i}`;
+
+	// set the first nav element to active
+	if (i === 1) nav_img.classList.add('active');
+	
 	el.appendChild(nav_img);
 }
 
