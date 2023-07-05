@@ -8,6 +8,7 @@
     cursor: pointer;
     flex: 1;
     list-style-type: none;
+    margin: 0 4px;
     position: relative;
 }
 

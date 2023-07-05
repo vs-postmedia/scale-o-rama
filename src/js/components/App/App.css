@@ -1,6 +1,6 @@
 #app {
 	margin: 0 auto;
-	/* max-width: 750px; */
+	max-width: 750px;
 	padding: 0;	
 }
 
@@ -12,6 +12,7 @@
 	max-width: 600px;
 }
 #app .subhead {
+	font-size: 1.1rem;
 	margin: 0 auto;
 	max-width: 600px;
 	padding: 4px 0;
