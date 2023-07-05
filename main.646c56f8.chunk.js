@@ -250,7 +250,9 @@ async function setupGeocoder(map, options) {
 function removeMap() {
   // clear existing map
   if (Map_map._removed !== true) {
-    Map_map.remove();
+    // map.remove();
+    // clear existing polygon
+    Map_map.removeLayer(mapLayerName).removeSource(mapLayerName);
   }
 }
 function updatePolygonPosition(e, flyto) {
@@ -279,10 +281,11 @@ var App = __webpack_require__(123);
 
 
 // VARS
-var App_polygons;
+var activeNavId, App_polygons;
 
 // map tiles & attribution
 var App_options = {
+  activeNavId: 'nav-img-01',
   bearing: 0,
   center: [-122.58876218587124, 49.24433191299974],
   geocodeZoomLevel: 8,
@@ -291,6 +294,7 @@ var App_options = {
   zoom: 7.75
 };
 function App_init(navImages, polys) {
+  activeNavId = App_options.activeNavId;
   App_polygons = polys;
 
   // startup the map
@@ -309,9 +313,17 @@ function buildNav(img, i) {
   var nav = document.querySelector('#nav');
   nav.addEventListener('click', function (e) {
     var navEl;
+
+    // clear the active class
+    var elems = document.querySelectorAll('#nav > li > img');
+    elems.forEach(function (el) {
+      el.classList.remove('active');
+    });
     if (e.target.tagName === 'IMG') {
       var id = e.target.id;
       navEl = id.substr(id.length - 1);
+      var activeNavEl = document.querySelector("#".concat(id));
+      activeNavEl.classList.add('active');
 
       // reset the map the map
       Map_Map.removeMap();
@@ -325,17 +337,20 @@ function loadNavImages(img, i) {
   nav_img.src = img;
   nav_img.alt = "Nav 0".concat(i, " button image");
   nav_img.id = "nav-img-0".concat(i);
+
+  // set the first nav element to active
+  if (i === 1) nav_img.classList.add('active');
   el.appendChild(nav_img);
 }
 /* harmony default export */ var App_App = ({
   init: App_init
 });
 // CONCATENATED MODULE: ./src/images/nav-01.png
-/* harmony default export */ var nav_01 = (__webpack_require__.p + "assets/nav-01.c5ce7837.png");
+/* harmony default export */ var nav_01 = (__webpack_require__.p + "assets/nav-01.20368cda.png");
 // CONCATENATED MODULE: ./src/images/nav-02.png
-/* harmony default export */ var nav_02 = (__webpack_require__.p + "assets/nav-02.c5ce7837.png");
+/* harmony default export */ var nav_02 = (__webpack_require__.p + "assets/nav-02.255cdfdb.png");
 // CONCATENATED MODULE: ./src/images/nav-03.png
-/* harmony default export */ var nav_03 = (__webpack_require__.p + "assets/nav-03.c5ce7837.png");
+/* harmony default export */ var nav_03 = (__webpack_require__.p + "assets/nav-03.79c340c9.png");
 // EXTERNAL MODULE: ./src/data/donnie-creek-july02.geojson
 var donnie_creek_july02_geojson = __webpack_require__(50);
 var donnie_creek_july02_geojson_default = /*#__PURE__*/__webpack_require__.n(donnie_creek_july02_geojson);
