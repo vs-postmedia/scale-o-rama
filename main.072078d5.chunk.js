@@ -121,8 +121,7 @@ async function init(options, polygon) {
   const geojson = recenterPolygon(center, Map_poly);
 
   // Add zoom, geocode, etc, to the map
-  // addMapFeatures(map, geocoder);
-
+  addMapFeatures(Map_map, geocoder);
   Map_map.on('load', () => addMapData(Map_map, geojson));
   Map_map.on('click', e => updatePolygonPosition(e));
   return Map_map;
