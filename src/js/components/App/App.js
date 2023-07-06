@@ -24,12 +24,14 @@ function init(navImages, polys) {
 	Map.init(options, polygons[0]);
 
 	// setup nav bar
-	navImages.forEach((d,i) => buildNav(d, i));
+	buildNav(navImages);
 }
 
-function buildNav(img, i) {
+function buildNav(images) {
 	// load nav images
-	loadNavImages(img, i + 1);
+	images.forEach((img, i) => {
+		loadNavImages(img, i + 1);
+	});
 
 	// add event handler
 	const nav = document.querySelector('#nav')
@@ -52,7 +54,7 @@ function buildNav(img, i) {
 			activeNavEl.classList.add('active');
 
 			// reset the map the map
-			Map.removeMap();
+			Map.removePolygons();
 			Map.init(options, polygons[parseInt(navEl) - 1]);
 		}
 		

@@ -201,16 +201,18 @@ async function setupGeocoder(map, options) {
 	return geocoder;
 }
 
-function removeMap() {
+function removePolygons() {
+	// console.log('remove map!')
 	// clear existing map
 	if (map._removed !== true) {
-		map.remove();
+		// map.remove();
 		// clear existing polygon
-		// map
-			// .removeLayer(mapLayerName)
-			// .removeSource(mapLayerName);
+		map
+			.removeLayer('polygon')
+			.removeSource('polygon');
 	}
 }
+
 
 function updatePolygonPosition(e, flyto) {
 	// source for center coords differs depending on if it's the result of a map click or geocode result
@@ -226,4 +228,4 @@ function updatePolygonPosition(e, flyto) {
 	addMapData(map, geojson);
 }
 
-export default { init, removeMap };
+export default { init, removePolygons };
