@@ -136,7 +136,6 @@ function addMapData(map, geojson) {
       break;
     }
   }
-  console.log(firstSymbolId);
 
   // add layers
   map
