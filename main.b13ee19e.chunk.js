@@ -258,17 +258,15 @@ async function setupGeocoder(map, options) {
   });
   return geocoder;
 }
-function removeMap() {
+function removePolygons() {
+  // console.log('remove map!')
   // clear existing map
   if (Map_map._removed !== true) {
-    Map_map.remove();
+    // map.remove();
     // clear existing polygon
-    // map
-    // .removeLayer(mapLayerName)
-    // .removeSource(mapLayerName);
+    Map_map.removeLayer('polygon').removeSource('polygon');
   }
 }
-
 function updatePolygonPosition(e, flyto) {
   // source for center coords differs depending on if it's the result of a map click or geocode result
   center = flyto === true ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
@@ -282,7 +280,7 @@ function updatePolygonPosition(e, flyto) {
 }
 /* harmony default export */ var Map_Map = ({
   init,
-  removeMap
+  removePolygons
 });
 // EXTERNAL MODULE: ./src/js/components/App/App.css
 var App = __webpack_require__(123);
@@ -315,13 +313,13 @@ function App_init(navImages, polys) {
   Map_Map.init(App_options, App_polygons[0]);
 
   // setup nav bar
-  navImages.forEach(function (d, i) {
-    return buildNav(d, i);
-  });
+  buildNav(navImages);
 }
-function buildNav(img, i) {
+function buildNav(images) {
   // load nav images
-  loadNavImages(img, i + 1);
+  images.forEach(function (img, i) {
+    loadNavImages(img, i + 1);
+  });
 
   // add event handler
   var nav = document.querySelector('#nav');
@@ -342,7 +340,7 @@ function buildNav(img, i) {
       activeNavEl.classList.add('active');
 
       // reset the map the map
-      Map_Map.removeMap();
+      Map_Map.removePolygons();
       Map_Map.init(App_options, App_polygons[parseInt(navEl) - 1]);
     }
   });
