@@ -38,7 +38,7 @@ async function init(options, polygon) {
 	const geojson = recenterPolygon(center, poly);
 
 	// Add zoom, geocode, etc, to the map
-	// addMapFeatures(map, geocoder);
+	addMapFeatures(map, geocoder);
 
 	map.on('load', () => addMapData(map, geojson));
 
