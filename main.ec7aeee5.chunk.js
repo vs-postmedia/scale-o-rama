@@ -303,7 +303,7 @@ var App_options = {
   bearing: 0,
   center: [-122.69976218587124, 49.24433191299974],
   geocodeZoomLevel: 8,
-  mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=arETEBBqRxRrA5v30F6H',
+  mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=wXGiLzx2lPClB2DrIr0r',
   pitch: 0,
   zoom: 7.75
 };
