@@ -5,14 +5,18 @@
 }
 
 #nav > li {
+    align-items: center;
     cursor: pointer;
-    flex: 1;
+    display: flex;
+    justify-content: center;
     list-style-type: none;
     margin: 0 4px;
     position: relative;
+    text-align: center;
 }
 
 #nav > li > h3 {
+    font-size: 1rem;
     padding: 5px 10px;
     position: absolute;
     z-index: 99;
