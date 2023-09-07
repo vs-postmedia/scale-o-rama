@@ -14,7 +14,7 @@ import nav03 from './images/nav-03.png';
 
 // DATA
 // import polygon_01 from './data/donnie-creek-june29.geojson';
-import polygon_01 from './data/donnie-creek-july02.geojson';
+import polygon_01 from './data/donnie-creek-aug29.geojson';
 import polygon_02 from './data/c10784-2017.geojson';
 import polygon_03 from './data/g00117-1958.geojson';
 

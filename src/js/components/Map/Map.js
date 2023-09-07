@@ -111,14 +111,16 @@ function recenterPolygon(new_center, poly) {
 	// get center of polygon
 	const polyCom = centerOfMass(poly);
 	polyCenter = polyCom.geometry.coordinates;
+	const coords = poly.features ? poly.features[0].geometry.coordinates : poly.geometries[0].coordinates;
 
 	// create a new polygon with adjusted coordinates
-	const adjustedPolyCoords = poly.features[0].geometry.coordinates[0][0].map(c => {
+	const adjustedPolyCoords = coords[0][0].map(c => {
 		const lngDiff = new_center[0] - polyCenter[0];
 		const latDiff = new_center[1] - polyCenter[1];
 
 		return [c[0] + lngDiff, c[1] + latDiff];
 	});
+
 
 	// create geojson for adjusted polygon
 	var geojson = {
