@@ -149,13 +149,23 @@ function addMapData(map, geojson) {
     source: mapLayerName,
     layout: {},
     paint: {
-      'fill-color': '#DD2D25',
-      'fill-opacity': 0.5,
+      'fill-color': '#a62f22',
+      'fill-opacity': 0.6,
       'fill-outline-color': '#FFF'
     }
   },
   // insert layer below labels
-  firstSymbolId);
+  firstSymbolId).addLayer({
+    id: 'polygon-line',
+    type: 'line',
+    source: mapLayerName,
+    layout: {},
+    paint: {
+      'line-color': '#a62f22',
+      'line-opacity': 1,
+      'line-width': 2
+    }
+  });
 
   // layers.forEach(layer => {
   // 	console.log(layer)
