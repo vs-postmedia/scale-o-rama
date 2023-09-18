@@ -50,7 +50,8 @@
 #app .source,
 #app .credit {
 	color: var(--grey02);
-	font-size: 0.8rem;
+	font-size: 0.9rem;
+	margin-top: 5px
 }
 
 #app .credit {
