@@ -94,6 +94,7 @@ var maplibre_gl_geocoder = __webpack_require__(122);
 
 // VARS
 const mapLayerName = 'polygon';
+const mapLayerOutline = 'polygon-line';
 let center, Map_map, Map_poly, polyCenter;
 
 // FUNCTIONS
@@ -144,7 +145,7 @@ function addMapData(map, geojson) {
     type: 'geojson',
     data: geojson
   }).addLayer({
-    id: 'polygon',
+    id: mapLayerName,
     type: 'fill',
     source: mapLayerName,
     layout: {},
@@ -155,18 +156,17 @@ function addMapData(map, geojson) {
     }
   },
   // insert layer below labels
-  firstSymbolId);
-  // .addLayer({
-  // 	id: 'polygon-line',
-  // 	type: 'line',
-  // 	source: mapLayerName,
-  // 	layout: {},
-  // 	paint: {
-  // 		'line-color': '#a62f22',
-  // 		'line-opacity': 1,
-  // 		'line-width': 2
-  // 	}
-  // });
+  firstSymbolId).addLayer({
+    id: mapLayerOutline,
+    type: 'line',
+    source: mapLayerName,
+    layout: {},
+    paint: {
+      'line-color': '#a62f22',
+      'line-opacity': 1,
+      'line-width': 2
+    }
+  });
 
   // layers.forEach(layer => {
   // 	console.log(layer)
@@ -284,7 +284,7 @@ function updatePolygonPosition(e, flyto) {
   center = flyto === true ? e.result.center : [e.lngLat.lng, e.lngLat.lat];
 
   // clear existing polygon
-  Map_map.removeLayer(mapLayerName).removeSource(mapLayerName);
+  Map_map.removeLayer(mapLayerOutline).removeLayer(mapLayerName).removeSource(mapLayerName);
 
   // recenter & add back to the map
   const geojson = recenterPolygon(center, Map_poly);
