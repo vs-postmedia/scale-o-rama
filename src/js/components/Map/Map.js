@@ -11,6 +11,7 @@ import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 
 // VARS
 const mapLayerName = 'polygon';
+const mapLayerOutline = 'polygon-line';
 let center, map, poly, polyCenter
 
 // FUNCTIONS
@@ -66,7 +67,7 @@ function addMapData(map, geojson) {
 			data: geojson
 		})
 		.addLayer({
-			id: 'polygon',
+			id: mapLayerName,
 			type: 'fill',
 			source: mapLayerName,
 			layout: {},
@@ -80,7 +81,7 @@ function addMapData(map, geojson) {
 		firstSymbolId
 		)
 		.addLayer({
-			id: 'polygon-line',
+			id: mapLayerOutline,
 			type: 'line',
 			source: mapLayerName,
 			layout: {},
@@ -233,6 +234,7 @@ function updatePolygonPosition(e, flyto) {
 		
 	// clear existing polygon
 	map
+		.removeLayer(mapLayerOutline)
 		.removeLayer(mapLayerName)
 		.removeSource(mapLayerName);
 
