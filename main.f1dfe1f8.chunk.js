@@ -155,17 +155,18 @@ function addMapData(map, geojson) {
     }
   },
   // insert layer below labels
-  firstSymbolId).addLayer({
-    id: 'polygon-line',
-    type: 'line',
-    source: mapLayerName,
-    layout: {},
-    paint: {
-      'line-color': '#a62f22',
-      'line-opacity': 1,
-      'line-width': 2
-    }
-  });
+  firstSymbolId);
+  // .addLayer({
+  // 	id: 'polygon-line',
+  // 	type: 'line',
+  // 	source: mapLayerName,
+  // 	layout: {},
+  // 	paint: {
+  // 		'line-color': '#a62f22',
+  // 		'line-opacity': 1,
+  // 		'line-width': 2
+  // 	}
+  // });
 
   // layers.forEach(layer => {
   // 	console.log(layer)
